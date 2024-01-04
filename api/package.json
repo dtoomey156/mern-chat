@@ -1,20 +1,20 @@
 {
-  "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^8.0.3"
-  },
-  "name": "api",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index",
-    "dev": "nodemon --ext js,html,css, index",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "nodemon": "^3.0.2"
-  }
+    "dependencies": {
+        "express": "^4.18.2",
+        "mongoose": "^8.0.3"
+    },
+    "name": "api",
+    "version": "1.0.0",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server",
+        "dev": "nodemon --ext js,html,css, server",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "nodemon": "^3.0.2"
+    }
 }
