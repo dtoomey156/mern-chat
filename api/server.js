@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const UserModel = require("./models/User");
+const User = require("./models/User");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
@@ -29,6 +29,10 @@ app.get("/test", (req, res) => {
     res.json("poopy");
 });
 
+app.get("/", (req, res) => {
+    res.json("helooooooooo");
+});
+
 app.get("/profile", (req, res) => {
     const token = req.cookies?.token;
     if (token) {
@@ -37,14 +41,15 @@ app.get("/profile", (req, res) => {
             res.json(userData);
         });
     } else {
-        res.status(401).json("no token");
+        // res.status(401).json("no token");
+        return;
     }
 });
 
 app.post("/register", async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
-    const createdUser = await UserModel.create({
+    const createdUser = await User.create({
         username: username,
         password: hashedPassword,
     });
@@ -65,7 +70,25 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
     const { password, username } = req.body;
-    const foundUser = await UserModel.findOne({ username });
+    const foundUser = await User.findOne({ username });
+    if (foundUser) {
+        const passOk = bcrypt.compareSync(password, foundUser.password);
+        if (passOk) {
+            jwt.sign(
+                { userId: foundUser._id, username },
+                jwtSecret,
+                {},
+                (err, token) => {
+                    res.cookie("token", token, {
+                        sameSite: "none",
+                        secure: true,
+                    }).json({
+                        id: foundUser._id,
+                    });
+                }
+            );
+        }
+    }
 });
 
 // MongoDB via Mongoose connection confirmation
