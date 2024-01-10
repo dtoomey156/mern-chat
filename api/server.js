@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_URL);
 const jwtSecret = process.env.JWT_SECRET;
 const bcryptSalt = bcrypt.genSaltSync(10);
+const ws = require("ws");
 
 // this db variable is only used to log out the connection success or failure
 const db = mongoose.connection;
@@ -101,6 +102,11 @@ db.on("error", (err) => {
     console.error("Database connection error", err);
 });
 
-app.listen(process.env.SERVER_PORT, () => {
+const server = app.listen(process.env.SERVER_PORT, () => {
     console.log(`server listening on port ${process.env.SERVER_PORT}`);
+});
+
+const wss = new ws.WebSocketServer({ server });
+wss.on("connection", (connection) => {
+    console.log("websocket connected");
 });
