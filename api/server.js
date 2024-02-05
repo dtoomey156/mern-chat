@@ -73,6 +73,11 @@ app.get("/profile", (req, res) => {
     }
 });
 
+app.get("/people", async (req, res) => {
+    const users = await User.find({}, { _id: 1, username: 1 });
+    res.json(users);
+});
+
 app.post("/register", async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
