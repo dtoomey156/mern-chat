@@ -123,6 +123,10 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.post("/logout", (req, res) => {
+    res.cookie("token", "", { sameSite: "none", secure: true }).json("ok");
+});
+
 // MongoDB via Mongoose connection confirmation
 
 db.once("open", (_) => {
@@ -158,6 +162,7 @@ wss.on("connection", (connection, req) => {
         connection.ping();
         connection.deathTimer = setTimeout(() => {
             connection.isAlive = false;
+            clearInterval(connection.timer);
             connection.terminate();
             notifyAboutOnlinePeople();
         }, 1000);
